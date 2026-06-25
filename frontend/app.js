@@ -1,7 +1,7 @@
 // ── Config — change this to your deployed backend URL ────────────────────
 const API = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
   ? 'http://localhost:3000'
-  : 'https://YOUR-RENDER-APP.onrender.com'; // ← replace before deploying
+  : 'https://codevector-c5b3.onrender.com'; // ← replace before deploying
 
 // ── State ────────────────────────────────────────────────────────────────
 let cursorStack = [];   // stack of cursors; cursorStack[i] = cursor for page i
