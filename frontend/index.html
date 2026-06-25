@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProductCatalog — CodeVector</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #111118;
+      --bg3: #1a1a24;
+      --border: #2a2a38;
+      --border2: #3a3a50;
+      --accent: #6366f1;
+      --accent-glow: rgba(99,102,241,0.15);
+      --accent2: #8b5cf6;
+      --text: #e8e8f0;
+      --text2: #9898b8;
+      --text3: #5a5a7a;
+      --green: #22c55e;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --radius: 10px;
+      --font: 'Inter', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* ── Header ─────────────────────────────────────────── */
+    header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(10,10,15,0.9);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .logo {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .logo-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+    }
+    .header-badge {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: var(--text3);
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .header-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .status-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .status-label { font-size: 12px; color: var(--text2); }
+
+    /* ── Layout ─────────────────────────────────────────── */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    /* ── Stats bar ──────────────────────────────────────── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .stat-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      transition: border-color 0.2s;
+    }
+    .stat-card:hover { border-color: var(--border2); }
+    .stat-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin-bottom: 6px;
+    }
+    .stat-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    .stat-sub {
+      font-size: 11px;
+      color: var(--text3);
+      margin-top: 2px;
+    }
+
+    /* ── Controls ───────────────────────────────────────── */
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .controls-left { display: flex; gap: 12px; flex: 1; flex-wrap: wrap; }
+
+    select, input[type=number] {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 14px;
+      padding: 9px 14px;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+      min-width: 180px;
+    }
+    select:focus, input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .select-wrapper { position: relative; }
+    .select-wrapper::after {
+      content: '▾';
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text3);
+      pointer-events: none;
+      font-size: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      border-radius: var(--radius);
+      border: none;
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover { background: #4f52e0; transform: translateY(-1px); }
+    .btn-ghost {
+      background: var(--bg2);
+      color: var(--text2);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--border2); color: var(--text); }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    /* ── Page size ──────────────────────────────────────── */
+    .page-size-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .page-size-label { font-size: 13px; color: var(--text3); white-space: nowrap; }
+
+    /* ── Table ──────────────────────────────────────────── */
+    .table-wrapper {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    thead tr {
+      border-bottom: 1px solid var(--border);
+      background: var(--bg3);
+    }
+    th {
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text3);
+    }
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--bg3); }
+    td {
+      padding: 13px 16px;
+      font-size: 14px;
+      color: var(--text);
+    }
+    td.id-cell {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text3);
+    }
+    td.name-cell { font-weight: 500; max-width: 260px; }
+    td.price-cell {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--green);
+    }
+    td.date-cell {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text3);
+    }
+
+    .category-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      border: 1px solid;
+    }
+
+    /* ── Pagination ─────────────────────────────────────── */
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .pagination.hidden { display: none; }
+    .pagination-info {
+      font-size: 13px;
+      color: var(--text3);
+    }
+    .pagination-info span { color: var(--text2); font-weight: 500; }
+    .pagination-buttons { display: flex; gap: 8px; }
+
+    /* ── Loading ─────────────────────────────────────────── */
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10,10,15,0.6);
+      -webkit-backdrop-filter: blur(4px);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    .loading-overlay.visible { display: flex; }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Empty / error states ───────────────────────────── */
+    .state-box {
+      text-align: center;
+      padding: 60px 24px;
+      color: var(--text3);
+    }
+    .state-box .icon { font-size: 36px; margin-bottom: 12px; }
+    .state-box h3 { font-size: 16px; color: var(--text2); margin-bottom: 6px; }
+    .state-box p { font-size: 14px; }
+
+    /* ── Toast ──────────────────────────────────────────── */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius);
+      padding: 12px 18px;
+      font-size: 13px;
+      color: var(--text);
+      z-index: 300;
+      display: none;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      animation: slideUp 0.2s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(12px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    /* ── Category colours ───────────────────────────────── */
+    .cat-electronics  { color:#60a5fa; border-color:#1d4ed8; background:rgba(29,78,216,0.1); }
+    .cat-clothing     { color:#f472b6; border-color:#9d174d; background:rgba(157,23,77,0.1); }
+    .cat-books        { color:#a78bfa; border-color:#5b21b6; background:rgba(91,33,182,0.1); }
+    .cat-home         { color:#34d399; border-color:#065f46; background:rgba(6,95,70,0.1); }
+    .cat-sports       { color:#fb923c; border-color:#9a3412; background:rgba(154,52,18,0.1); }
+    .cat-toys         { color:#facc15; border-color:#713f12; background:rgba(113,63,18,0.1); }
+    .cat-food         { color:#4ade80; border-color:#14532d; background:rgba(20,83,45,0.1); }
+    .cat-automotive   { color:#94a3b8; border-color:#334155; background:rgba(51,65,85,0.1); }
+    .cat-health       { color:#f87171; border-color:#7f1d1d; background:rgba(127,29,29,0.1); }
+    .cat-office       { color:#67e8f9; border-color:#164e63; background:rgba(22,78,99,0.1); }
+    .cat-jewelry      { color:#fcd34d; border-color:#78350f; background:rgba(120,53,15,0.1); }
+    .cat-pet          { color:#86efac; border-color:#14532d; background:rgba(20,83,45,0.1); }
+    .cat-music        { color:#c4b5fd; border-color:#4c1d95; background:rgba(76,29,149,0.1); }
+    .cat-movies       { color:#fda4af; border-color:#881337; background:rgba(136,19,55,0.1); }
+    .cat-software     { color:#6ee7b7; border-color:#064e3b; background:rgba(6,78,59,0.1); }
+    .cat-tools        { color:#d1d5db; border-color:#374151; background:rgba(55,65,81,0.1); }
+    .cat-default      { color:#9ca3af; border-color:#374151; background:rgba(55,65,81,0.1); }
+
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      td.date-cell, th:last-child, td:last-child { display: none; }
+      .controls { flex-direction: column; align-items: stretch; }
+      select, .select-wrapper { min-width: unset; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+</div>
+
+<div id="toast"></div>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-dot"></div>
+      ProductCatalog
+    </div>
+    <span class="header-badge">v1.0</span>
+    <div class="header-right">
+      <div class="status-dot" id="statusDot"></div>
+      <span class="status-label" id="statusLabel">Connecting…</span>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- Stats -->
+  <div class="stats-grid" id="statsGrid">
+    <div class="stat-card"><div class="stat-label">Total Products</div><div class="stat-value" id="statTotal">—</div></div>
+    <div class="stat-card"><div class="stat-label">Categories</div><div class="stat-value" id="statCats">—</div></div>
+    <div class="stat-card"><div class="stat-label">Avg Price</div><div class="stat-value" id="statAvg">—</div></div>
+    <div class="stat-card"><div class="stat-label">Price Range</div><div class="stat-value" id="statRange">—</div><div class="stat-sub" id="statRangeSub"></div></div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="controls-left">
+      <div class="select-wrapper">
+        <select id="categorySelect" title="Filter by category" onchange="onCategoryChange()">
+          <option value="">All Categories</option>
+        </select>
+      </div>
+      <div class="page-size-wrapper">
+        <span class="page-size-label">Per page:</span>
+        <div class="select-wrapper">
+          <select id="limitSelect" title="Products per page" onchange="onLimitChange()">
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-ghost" id="refreshBtn" onclick="refreshData()">↺ Refresh</button>
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrapper" id="tableWrapper">
+    <div class="state-box"><div class="icon">⌛</div><h3>Loading products…</h3></div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination hidden" id="pagination">
+    <div class="pagination-info" id="paginationInfo"></div>
+    <div class="pagination-buttons">
+      <button class="btn btn-ghost" id="prevBtn" onclick="goBack()" disabled>← Previous</button>
+      <button class="btn btn-primary" id="nextBtn" onclick="goNext()" disabled>Next →</button>
+    </div>
+  </div>
+
+</main>
+
+<script src="/app.js"></script>
+</body>
+</html>

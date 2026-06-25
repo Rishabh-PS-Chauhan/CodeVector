@@ -1,0 +1,11 @@
+{
+  "name": "codevector-product-catalog",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": ["backend"],
+  "scripts": {
+    "start": "cd backend && npm start",
+    "dev": "cd backend && npm run dev",
+    "seed": "node scripts/seed.js"
+  }
+}
