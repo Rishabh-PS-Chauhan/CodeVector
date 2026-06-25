@@ -14,10 +14,7 @@ const PORT = process.env.PORT || 3000;
 // an inline <script> tag. In production you should tighten CSP using nonces
 // or external scripts instead of allowing unsafe-inline.
 app.use(helmet({ contentSecurityPolicy: false }));
-app.use(cors({
-  origin: process.env.ALLOWED_ORIGINS?.split(',') || '*',
-  methods: ['GET'],
-}));
+app.use(cors({ origin: '*', methods: ['GET'] }));
 app.use(express.json());
 
 // Rate limiting — 200 req/min per IP
